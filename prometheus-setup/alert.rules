@@ -1,0 +1,17 @@
+groups:
+  - name: example
+    rules:
+      - alert: HighCPUUsage
+        expr: sum(rate(node_cpu_seconds_total{mode="user"}[5m])) by (instance) < 0.9
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          description: "CPU usage is below 90% for instance {{ $labels.instance }}"
+      - alert: HighCPUUsage2
+        expr: sum(rate(node_cpu_seconds_total{mode="user"}[5m])) by (instance) > 0.9
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          description: "CPU usage is above 90% for instance {{ $labels.instance }}"

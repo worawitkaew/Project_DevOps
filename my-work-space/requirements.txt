@@ -1,0 +1,8 @@
+uuid
+
+langchain_core
+langgraph
+
+langchain_ollama
+
+streamlit

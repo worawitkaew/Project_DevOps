@@ -1,0 +1,23 @@
+FROM python
+
+WORKDIR /usr/src/app/my-work-space
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+################################################################
+# ติดตั้ง dependencies ที่จำเป็นสำหรับ Ollama
+RUN apt-get update && apt-get install -y \
+    curl \
+    libmagic-dev \
+    && rm -rf /var/lib/apt/lists/*
+# ติดตั้ง Ollama CLI
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+RUN pip install ollama
+###############################################################
+
+# python langchain_streamlit.py
+ENTRYPOINT ["sh", "-c", "ollama serve & python activate_ollama3.py ; streamlit run index_streamlit.py"]
+
+
+

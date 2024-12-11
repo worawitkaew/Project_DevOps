@@ -1,0 +1,50 @@
+services:
+
+  api:
+    build:
+      context: ./my-work-space
+    ports:
+      - "8000:8501"
+    volumes:
+       - ./my-work-space:/usr/src/app/my-work-space
+
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
+  prometheus:
+    image: prom/prometheus:latest
+    
+    container_name: prometheus
+    volumes:
+      - ./prometheus-setup/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus-setup/alert.rules:/etc/prometheus/alert.rules
+      - ./prometheus-setup/prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - localprom
+
+  node-exporter:
+    image: prom/node-exporter
+    networks:
+      - localprom
+    ports:
+      - 9100:9100
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - localprom
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"  # Set admin password for Grafana
+
+networks:
+  localprom:
+    driver: bridge
