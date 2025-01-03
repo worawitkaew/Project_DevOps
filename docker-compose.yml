@@ -24,7 +24,7 @@ services:
       - ./prometheus-setup/alert.rules:/etc/prometheus/alert.rules
       - ./prometheus-setup/prometheus_data:/prometheus
     ports:
-      - "9090:9090"
+      - "9000:9090"
     networks:
       - localprom
 
